@@ -16,7 +16,7 @@ class myHandler(BaseHTTPRequestHandler):
 	
 	#Handler for the GET requests
 	def do_GET(self):
-		print('GET entered')
+		#DEBUG print('GET entered')
 		if self.path=="/":
 			self.path="/index.html"
 
@@ -47,14 +47,15 @@ class myHandler(BaseHTTPRequestHandler):
 				mimetype='text/css'
 				sendFile = True
 			#self.path='/map.png'
-			print('sendFile at get  = ',sendFile, '. Filename=',self.path)
+			#DEBUG print('sendFile at get  = ',sendFile, '. Filename=',self.path)
 			if (sendFile == True):
-				print('sending file  ... ',self.path)
+				#DEBUG print('sending file  ... ',self.path)
 				#self.path='map.png'
 				if (os.path.isfile(curdir+self.path)):         ###### 1 test
-					print('file exists ...')
+					#print('file exists ...')
+                                        aassaa=1
 				else:
-					print('....file doesnot exist########################################')
+					print('....file doesnot exist ########################################')
 					whatiwo=self.path
 					url='http://a.tile.komoot.de/komoot-2'+whatiwo
 					makedir=os.path.dirname(self.path)
@@ -65,7 +66,7 @@ class myHandler(BaseHTTPRequestHandler):
 					urllib.request.urlretrieve( url , curdir+self.path)
 					time.sleep(0.7)
 				if (os.path.isfile(curdir+self.path)):     ######## 2 final test
-					print('file exists ...')
+					#DEBUG print('file exists ...')
 					f = open(curdir  + self.path,'rb') 
 					print('serving filename = ' + str( f.name ) +'  close:'+ str( f.closed)  )
 					#print('a')
