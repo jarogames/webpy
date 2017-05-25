@@ -6,6 +6,7 @@ import os.path
 import cgi
 
 PORT_NUMBER = 8011
+WEBHOME='/home/spiral2/SharedDisk/spiral2-web/
 
 #This class will handles any incoming request from
 #the browser 
@@ -39,6 +40,7 @@ class myHandler(BaseHTTPRequestHandler):
                         if self.path.endswith(".css"):
                                 mimetype='text/css'
                                 sendFile = True
+                        self.path=WEBHOME+self.path
                         if sendFile and (os.path.isfile(self.path)):
                                 print('sendFile at get  = ',sendFile, '. Filename=',self.path)
                         else:
