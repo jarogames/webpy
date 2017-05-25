@@ -6,7 +6,7 @@ import os.path
 import cgi
 
 PORT_NUMBER = 8011
-WEBHOME='/home/spiral2/SharedDisk/spiral2-web/
+WEBHOME='/home/spiral2/SharedDisk/spiral2-web/'
 
 #This class will handles any incoming request from
 #the browser 
