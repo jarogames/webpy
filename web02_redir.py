@@ -6,15 +6,27 @@ import os.path
 import cgi
 import datetime
 import logging
+import argparse
 
-
+import re
 ###================================ end of logging config
 
 PORT_NUMBER = 8011
 WEBHOME='/home/spiral2/SharedDisk/spiral2-web/'
 WEBHOME='/home/ojr/Maps'
 
+parser=argparse.ArgumentParser(description=""" 
+""")
 
+parser.add_argument('-w','--webhome',  default="/home/spiral2/SharedDisk/spiral2-web" , help='')
+parser.add_argument('-p','--port',  default=8011,type=int , help='')
+
+args=parser.parse_args() 
+WEBHOME=args.webhome
+PORT_NUMBER=args.port
+
+
+### LOGGER ====================================
 formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
 def setup_logger(name, log_file, level=logging.INFO):
     """Function setup as many loggers as you want"""
@@ -41,6 +53,16 @@ class myHandler(BaseHTTPRequestHandler):
                 log.info( datetime.datetime.now().strftime("%Y%m%d_%a_%H%M%S")+' '+self.client_address[0]+' '+'#'+' '+self.requestline )
                 loH.info( self.headers)
                 #print('GET ', end='')
+                #self.path=
+                #print( re.sub( r'\.\.','', self.path ) )
+                if self.path.find('\.\.')>=0:
+                        print('ERROR .. ', self.path)
+                        log.error(' .. ')
+                        return
+                if self.path.find('/')!=0:
+                        print('ERROR / ', self.path)
+                        log.error(' / ')
+                        return
                 if self.path=="/":
                         self.path="/index.html"
                         response='<meta http-equiv="refresh" content="0; url=http://example.com/" />'
