@@ -103,7 +103,7 @@ class myHandler(BaseHTTPRequestHandler):
         remoteIP=re.findall('X-Forwarded-For:\s+([\d\.]+)', str(self.headers) )
         #remoteIP=re.findall(r'Connection:(.+)', str(self.headers) )
         print( 'remoteIP=',remoteIP )
-        log.info( datetime.datetime.now().strftime(" %a  - ")+self.client_address[0]+' '.join(remoteIP)+' # '+self.requestline )
+        log.info( datetime.datetime.now().strftime(" %a  - ")+self.client_address[0]+'   '+' '.join(remoteIP)+' # '+self.requestline )
 #        log.info( datetime.datetime.now().strftime("%Y%m%d_%a_%H%M%S")+' '+self.client_address[0]+' '+ '#' +' '+self.requestline )
         loH.info( self.headers)
         #print('GET ', end='')
