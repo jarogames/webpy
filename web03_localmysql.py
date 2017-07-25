@@ -21,6 +21,7 @@ mysqltable="nfs"
 mysqluser="ojr"
 mysqlpass=""
 with open( mysqltable+'.mysql') as f:
+    mysqlhost=f.readline().rstrip()
     mysqluser=f.readline().rstrip()
     mysqlpass=f.readline().rstrip()
 
@@ -94,7 +95,7 @@ def PrepareCNTS(WEBHOME, prefix):
     # rel=subprocess.check_output( CMDELE,  shell=True ).decode('utf8').split()
 
     
-    line=" <h3>COUNTERS - NFS/IC . <br>"+now.strftime("%H:%M:%S")+" </h3><br> \n<br>\n<table>"
+    line=" <h3>COUNTERS - NFS/IC . <br>"+"Server time:  &nbsp "+now.strftime("%H:%M:%S")+" </h3><br> \n<br>\n<table>"
     lines.append(line)
     if len(r)>=3:
         line=" <tr align \"right\"  bgcolor=\"#AAFF55\"><td>CLONA    </td><td>: {:10.2f} &nbsp {}</td></tr>".format( float(r[0]),r[2])
