@@ -94,8 +94,39 @@ def PrepareCNTS(WEBHOME, prefix):
     # CMDELE='echo "select value,datetime from sensor7 order by datetime desc limit 1;" | mysql -u greis  -pgreis -h mojzis  monitoring | tail -1'
     # rel=subprocess.check_output( CMDELE,  shell=True ).decode('utf8').split()
 
+
+    head="""<head>
+<script type="text/javascript">
+    <!--
+    function updateTime() {
+        var currentTime = new Date();
+        var hours = currentTime.getHours();
+        var minutes = currentTime.getMinutes();
+        var seconds = currentTime.getSeconds();
+        if (minutes < 10){
+            minutes = "0" + minutes;
+        }
+        if (seconds < 10){
+            seconds = "0" + seconds;
+        }
+        var v = hours + ":" + minutes + ":" + seconds + " ";
+        setTimeout("updateTime()",100);
+        document.getElementById('time').innerHTML=v;
+    }
+    updateTime();
+    //-->
+</script>
+</head>
+    """
     
-    line=" <h3>COUNTERS - NFS/IC . <br>"+"Server time:  &nbsp "+now.strftime("%H:%M:%S")+" </h3><br> \n<br>\n<table>"
+    line=" <h3>COUNTERS - NFS/IC . <br>"
+    lines.append(line)
+    line=" <h3> <br>"+"Local PC time:  <span id=\"time\"/> </h3>"
+    lines.append(line)
+    line="<h3>Server time:  &nbsp "+now.strftime("%H:%M:%S")+" </h3><br> \n<br>\n"
+    lines.append(line)
+
+    line=" <table><tr align \"right\"><td>          </td><td>:   nA  &nbsp MySQL time</td></tr>"
     lines.append(line)
     if len(r)>=3:
         line=" <tr align \"right\"  bgcolor=\"#AAFF55\"><td>CLONA    </td><td>: {:10.2f} &nbsp {}</td></tr>".format( float(r[0]),r[2])
@@ -111,7 +142,7 @@ def PrepareCNTS(WEBHOME, prefix):
     line=" <tr align \"right\"><td>T2       </td><td>: {:10.2f}</td></tr>  </font>".format( 0.0 )
     lines.append(line)
 
-    return "\n".join(lines)
+    return  head+"<body>"+"\n".join(lines)+"</body>"
 
 
 
