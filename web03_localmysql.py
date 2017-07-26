@@ -121,13 +121,14 @@ def PrepareCNTS(WEBHOME, prefix):
     
     line=" <h3>COUNTERS - NFS/IC . <br>"
     lines.append(line)
-    line=" <h3> <br>"+"Local PC time:  <span id=\"time\"/> </h3>"
+    line=" <h3> <br>"+"Local PC time:  <span id=\"time\"/> </br></h3>"
     lines.append(line)
-    line="<h3>Server time:  &nbsp "+now.strftime("%H:%M:%S")+" </h3><br> \n<br>\n"
+    line="Server time:  &nbsp "+now.strftime("%H:%M:%S")+" \n\n"
     lines.append(line)
 
     line=" <table><tr align \"right\"><td>          </td><td>:   nA  &nbsp MySQL time</td></tr>"
     lines.append(line)
+    
     if len(r)>=3:
         line=" <tr align \"right\"  bgcolor=\"#AAFF55\"><td>CLONA    </td><td>: {:10.2f} &nbsp {}</td></tr>".format( float(r[0]),r[2])
         lines.append(line)
@@ -141,7 +142,7 @@ def PrepareCNTS(WEBHOME, prefix):
     lines.append(line)
     line=" <tr align \"right\"><td>T2       </td><td>: {:10.2f}</td></tr>  </font>".format( 0.0 )
     lines.append(line)
-
+ 
     return  head+"<body>"+"\n".join(lines)+"</body>"
 
 
