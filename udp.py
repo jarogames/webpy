@@ -16,5 +16,5 @@ while True:
     da2=da.strftime("%H:%M:%S")
     line=da2+"{:6d}".format(i)+" "+data.decode("utf8").rstrip()
     with open("log.log","a") as f:
-        f.write( line )
+        f.write( line+"\n" )
     print( line )
