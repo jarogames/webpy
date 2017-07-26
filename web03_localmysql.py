@@ -77,14 +77,24 @@ def PrepareCNTS(WEBHOME, prefix):
     rel=[0,0,0]
 
         
-    
+    # LOCAL MYSQL
     CMD='echo "select *  from '+mysqltable+' order by t desc limit 1;" | mysql -u '+mysqluser+'  -p'+mysqlpass+' -h '+mysqlhost+' '+mysqldb+' | tail -1'
     #print(CMD)
     rloc=subprocess.check_output( CMD,  shell=True ).decode('utf8').split()   
     #print(rloc)
+    #
+    # MARTIN RODAK -  thread? block?
     CMDCLONA='echo "select value,datetime from sensor1 order by datetime desc limit 1;" | mysql --connect-timeout=1 -u greis  -pgreis -h mojzis  monitoring | tail -1'
     r=subprocess.check_output( CMDCLONA,  shell=True ).decode('utf8').split()
-    
+
+    log=""
+    if os.path.exists("log.log"):
+        with open("log.log") as f:
+            log=f.readlines()
+            log=log[-12:]
+            log=reversed(log)
+    else:
+        print("!... log.log file doesnt exist")
     # CMDFARAD='echo "select value,datetime from sensor9 order by datetime desc limit 1;" | mysql -u greis  -pgreis -h mojzis  monitoring | tail -1'
     # rfa=subprocess.check_output( CMDFARAD,  shell=True ).decode('utf8').split()
 
@@ -140,10 +150,14 @@ def PrepareCNTS(WEBHOME, prefix):
     lines.append(line)
     line=" <tr align \"right\"><td>T1       </td><td>: {:10.2f}</td></tr>".format( 0.0 )
     lines.append(line)
-    line=" <tr align \"right\"><td>T2       </td><td>: {:10.2f}</td></tr>  </font>".format( 0.0 )
+    line=" <tr align \"right\"><td>T2       </td><td>: {:10.2f}</td></tr>  </font></table>".format( 0.0 )
     lines.append(line)
  
-    return  head+"<body>"+"\n".join(lines)+"</body>"
+    return  head+"<body>"+"\n".join(lines)+"<hr>"+"<br>\n".join(log)+"</body>"
+
+
+
+
 
 
 
@@ -197,7 +211,7 @@ class myHandler(BaseHTTPRequestHandler):
         #LOG STUFF
         remoteIP=re.findall('X-Forwarded-For:\s+([\d\.]+)', str(self.headers) )
         #remoteIP=re.findall(r'Connection:(.+)', str(self.headers) )
-        print( 'remoteIP=',remoteIP )
+        #print( 'remoteIP=',remoteIP )
         log.info( datetime.datetime.now().strftime(" %a  - ")+self.client_address[0]+'   '+' '.join(remoteIP)+' # '+self.requestline )
 #        log.info( datetime.datetime.now().strftime("%Y%m%d_%a_%H%M%S")+' '+self.client_address[0]+' '+ '#' +' '+self.requestline )
         loH.info( self.headers)
@@ -235,7 +249,7 @@ class myHandler(BaseHTTPRequestHandler):
         #print('i... succeeded to NASTRO', self.path)
         self.path=re.sub('/nastro','', self.path )    # remove /nastro
         if len(self.path)==0: self.path='/'
-        print('i... succeeded to NASTRO', self.path)
+        #print('i... succeeded to NASTRO', self.path)
         #if self.path=="/":  # just translate
         #    self.path="/index.html"
         try:
@@ -273,7 +287,7 @@ class myHandler(BaseHTTPRequestHandler):
             else:  # UNKNOWN EXTENSION OR EMPTY after /nastro
                 # MY OWN CODES =================================
                 if self.path.find('nfs'):
-                    print('NFS CODE')
+                    #print('NFS CODE')
                     self.send_response(200)
                     self.send_header('Content-type','text/html')
                     self.end_headers()

@@ -14,4 +14,7 @@ while True:
     i=i+1
     da=datetime.datetime.now()
     da2=da.strftime("%H:%M:%S")
-    print(i,da2,data.decode("utf8").rstrip() )
+    line=da2+"{:6d}".format(i)+" "+data.decode("utf8").rstrip()
+    with open("log.log","a") as f:
+        f.write( line )
+    print( line )
