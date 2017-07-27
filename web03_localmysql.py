@@ -95,6 +95,15 @@ def PrepareCNTS(WEBHOME, prefix):
             log=reversed(log)
     else:
         print("!... log.log file doesnt exist")
+    beamon="."
+    if os.path.exists("beamon"):
+        with open("beamon") as f:
+            beamon=f.readlines()[0]
+    deteon="."
+    if os.path.exists("deteon"):
+        with open("deteon") as f:
+            deteon=f.readlines()[0]
+    #
     # CMDFARAD='echo "select value,datetime from sensor9 order by datetime desc limit 1;" | mysql -u greis  -pgreis -h mojzis  monitoring | tail -1'
     # rfa=subprocess.check_output( CMDFARAD,  shell=True ).decode('utf8').split()
 
@@ -120,7 +129,7 @@ def PrepareCNTS(WEBHOME, prefix):
             seconds = "0" + seconds;
         }
         var v = hours + ":" + minutes + ":" + seconds + " ";
-        setTimeout("updateTime()",100);
+        setTimeout("updateTime()",200);
         document.getElementById('time').innerHTML=v;
     }
     updateTime();
@@ -129,31 +138,73 @@ def PrepareCNTS(WEBHOME, prefix):
 </head>
     """
     
-    line=" <h3>COUNTERS - NFS/IC . <br>"
+    #line=" <h2>COUNTERS - NFS/IC . <br></h2>"
+    #lines.append(line)
+    line=" <h2> <br>"+"Local PC time:  <span id=\"time\"/> </br></h2>"
     lines.append(line)
-    line=" <h3> <br>"+"Local PC time:  <span id=\"time\"/> </br></h3>"
+    nowserver=now.strftime("%H:%M:%S")
+
+    lines.append("<pre>")
+
+    
+    line="                   nA  &nbsp MySQL time <br>"
     lines.append(line)
-    line="Server time:  &nbsp "+now.strftime("%H:%M:%S")+" \n\n"
+    line="Server time:             "+nowserver+"<br>"
     lines.append(line)
 
-    line=" <table><tr align \"right\"><td>          </td><td>:   nA  &nbsp MySQL time</td></tr>"
-    lines.append(line)
+    def getdif( nowserver, aa):
+        t1=datetime.datetime.strptime(nowserver,"%H:%M:%S")
+        t2=datetime.datetime.strptime(aa       ,"%H:%M:%S")
+        dt=(t1-t2).total_seconds()   # earlier it was recorded to mysql
+        if dt>=0. and dt<1.:return "palegreen"
+        if dt>=1. and dt<2.:return "greenyellow"
+        if dt>=2. and dt<3.:return "chartreuse"
+        if dt>=3. and dt<4.:return "lime"
+        if dt>=4. and dt<6.:return "springgreen"
+        if dt>=6. and dt<8.:return "lightsalmon"
+        if dt>=8. and dt<10.:return "coral"
+        if dt>=10. and dt<12.:return "tomato"
+        if dt>=12. and dt<14.:return "orangered"
+        if dt>=14. and dt<16.:return "salmon"
+        if dt>=16. and dt<18.:return "indianred"
+        return "red"
+    
     
     if len(r)>=3:
-        line=" <tr align \"right\"  bgcolor=\"#AAFF55\"><td>CLONA    </td><td>: {:10.2f} &nbsp {}</td></tr>".format( float(r[0]),r[2])
+        color=getdif(nowserver,r[2])
+        line=" <span style=\"background-color:"+color+"\"> CLONA   : {:10.2f} &nbsp {} </span><br>".format( float(r[0]),r[2])
         lines.append(line)
-    line=" <tr align \"right\"><td>DEGRADER </td><td>: {:10.2f} &nbsp {}</td></tr>".format( float(rloc[4]), rloc[1] )
+        
+    line=" DEGRADER : {:10.2f} &nbsp {} <br>".format( float(rloc[4]), rloc[1] )
     lines.append(line)
-    line=" <tr align \"right\"><td>ELEKTRODA</td><td>: {:10.2f} &nbsp {}</td></tr>".format( float(rloc[3]), rloc[1] )
+    
+    line=" ELEKTRODA: {:10.2f} &nbsp {} <br>".format( float(rloc[3]), rloc[1] )
     lines.append(line)
-    line=" <tr align \"right\" font size=\"18\" bgcolor=\"#FFAA55\"><td> <bf>FARADAY</bf>  </td><td><bf>: {:.2f} &nbsp {} </bf></td></tr>".format( float(rloc[2]), rloc[1]  )
+    
+    color=getdif(nowserver,rloc[1])
+    line="<span style=\"background-color:"+color+"\"> FARADAY  : {:10.2f} &nbsp {} </span><br>".format( float(rloc[2]), rloc[1]  )
     lines.append(line)
-    line=" <tr align \"right\"><td>T1       </td><td>: {:10.2f}</td></tr>".format( 0.0 )
+    
+    line=" T1       : {:10.2f} <br>".format( 0.0 )
     lines.append(line)
-    line=" <tr align \"right\"><td>T2       </td><td>: {:10.2f}</td></tr>  </font></table>".format( 0.0 )
+    
+    line=" T2       : {:10.2f} <br>".format( 0.0 )
     lines.append(line)
- 
-    return  head+"<body>"+"\n".join(lines)+"<hr>"+"<br>\n".join(log)+"</body>"
+    lines.append("</pre>")
+    #print(beamon+"1")
+    #print(deteon+"1")
+    final=      head+"<body>"
+    final=final+"<span style=\"font-family: Courier;font-weight:bold;font-size:12pt;\">"
+    final=final+"\n".join(lines)+"<hr>"      # table
+    final=final+"BEAM: <span style=\"color:red\">"+beamon+"</span><hr>"
+    final=final+"DETE: <span style=\"color:green\">"+deteon+"</span><hr>"
+    final=final+"</span>"
+    final=final+"<span style=\"font-family: Courier;\">"
+    final=final+"<br>\n".join(log)
+    final=final+"</span>"
+    final=final+"</body>"
+    #return  head+"<body>"+"\n".join(lines)+"<hr><br>"+beamon+"<hr>"+deteon+"<br>\n".join(log)+"</body>"
+    return  final
 
 
 
