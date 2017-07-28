@@ -1,0 +1,13 @@
+#!/bin/bash
+
+export GREGORY_CNT=$HOME/02_GIT/serial.pl
+export GREGORY_WEB=$HOME/WEB/
+echo saving jpgs to   $GREGORY_WEB
+#sleep 1
+#echo udp needs GREGORY_CNT ... not GREGORY
+echo ... reading faraday
+cd ~/02_GIT/serial.pl
+./graph.py
+echo done
+sleep 4
+

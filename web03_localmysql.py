@@ -195,8 +195,11 @@ def PrepareCNTS(WEBHOME, prefix):
     #print(deteon+"1")
     final=      head+"<body>"
     final=final+"<span style=\"font-family: Courier;font-weight:bold;font-size:12pt;\">"
-    final=final+"\n".join(lines)+"<hr>"      # table
-    final=final+"BEAM: <span style=\"color:red\">"+beamon+"</span><hr>"
+    final=final+"\n".join(lines)+"<hr>"      # table begin to end
+    #
+    img='&nbsp&nbsp<img src="nastro/current_faraday.jpg" style="width:300px;height:40px;"></img>'
+    #
+    final=final+"BEAM: <span style=\"color:red\">"+beamon+"</span>"+img+"<hr>"
     final=final+"DETE: <span style=\"color:green\">"+deteon+"</span><hr>"
     final=final+"</span>"
     final=final+"<span style=\"font-family: Courier;\">"

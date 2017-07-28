@@ -29,35 +29,86 @@ import mmap
 import contextlib
 import time
 
-gregoryDIR=os.environ.get('GREGORY')
-if gregoryDIR!=None:
-    print("+... GREGORY directory detected",gregoryDIR)
-    gregoryDIR=gregoryDIR+"/"
+#        Vadim UDP will run beam counter
+#                  and  vme run start
+#   PUT GREGORY_CNT INTO myservice script!
+#    
+#
+gregoryCNT_DIR=os.environ.get('GREGORY_CNT')
+if gregoryCNT_DIR!=None:
+    print("+... GREGORY_CNT directory detected",gregoryCNT_DIR)
+    gregoryCNT_DIR=gregoryCNT_DIR+"/"
 else:
-    print("x...       GREGORY dir NOT defined")
+    print("x...       GREGORY_CNT dir NOT defined")
     #os.chdir( os.environ['GREGORY'] )
-    gregoryDIR=""
-mmapfile=gregoryDIR+".mmap.1.vme"
-runnextfile=gregoryDIR+"RUNNEXT"
-print("i...    mmap file:", mmapfile)
-print("i... RUNNEXT file:", runnextfile)
+    gregoryCNT_DIR=""
+mmapfileCNT=gregoryCNT_DIR+".mmap.1.vme"
+#runnextfileCNT=gregoryCNT_DIR+"RUNNEXT"
+print("i...CNT mmap file:", mmapfileCNT)
+#print("i... RUNNEXT file:", runnextfileCNT)
+
+gregoryVME_DIR=os.environ.get('GREGORY_VME')
+if gregoryVME_DIR!=None:
+    print("+... GREGORY_VME directory detected",gregoryVME_DIR)
+    gregoryVME_DIR=gregoryVME_DIR+"/"
+else:
+    print("x...       GREGORY_VME dir NOT defined")
+    #os.chdir( os.environ['GREGORY'] )
+    gregoryVME_DIR=""
+mmapfileVME=gregoryVME_DIR+".mmap.1.vme"
+runnextfileVME=gregoryVME_DIR+"RUNNEXT"
+print("i...VME mmap file:", mmapfileVME)
+print("i... RUNNEXT file:", runnextfileVME)
 
 
-def getMM():
+deteonfile="deteon"
+beamonfile="beamon"
+logfile="log.log"
+
+with open(deteonfile,"w") as f:
+    f.write( "-" )
+with open(beamonfile,"w") as f:
+    f.write( "-" )
+
+
+def getMM_CNT():
     mm_first_run=0
-    print('?... trying to open ',mmapfile,'......')
-    if os.path.isfile( mmapfile ):
-        print('+... file',mmapfile,'was detected')
-        with open(mmapfile, "r+b") as f:
+    print('?... trying to open ',mmapfileCNT,'......')
+    if os.path.isfile( mmapfileCNT ):
+        print('+... file',mmapfileCNT,'was detected')
+        with open(mmapfileCNT, "r+b") as f:
             mm1 = mmap.mmap(f.fileno(), 0)# memory-map the file,size 0= whole
             qqqqq= mm1.readline()
             print("w...   MMAP : start/stop commands will be transmitted")
         return mm1
     else:
-        print("x... NO ", mmapfile)
+        print("x... NO ", mmapfileCNT)
         return 0
-mmx=getMM()    # HERE I OPEN FILE
-if mmx!=0:mmx.seek(0)
+    
+def getMM_VME():
+    mm_first_run=0
+    print('?... trying to open ',mmapfileVME,'......')
+    if os.path.isfile( mmapfileVME ):
+        print('+... file',mmapfileVME,'was detected')
+        with open(mmapfileVME, "r+b") as f:
+            mm1 = mmap.mmap(f.fileno(), 0)# memory-map the file,size 0= whole
+            qqqqq= mm1.readline()
+            print("w...   MMAP : start/stop commands will be transmitted")
+        return mm1
+    else:
+        print("x... NO ", mmapfileVME)
+        return 0
+
+mmxCNT=getMM_CNT()    # HERE I OPEN FILE CNT
+if mmxCNT!=0:mmxCNT.seek(0)
+mmxVME=0
+if gregoryVME_DIR!="":
+    mmxVME=getMM_VME()    # HERE I OPEN FILE VME
+    if mmxVME!=0:mmxVME.seek(0)
+else:
+    print("x... NO mmap FOR VME - NO vme start/stop")
+    time.sleep(2)
+    mmxVME=0
 #quit()
 
 
@@ -75,14 +126,14 @@ def beamtime():
     while "-" not in txt:
         lastx=txt
         print("BEAM_ON",txt)
-        with open('beamon',"w") as f:
+        with open(beamonfile,"w") as f:
             f.write( txt )
         time.sleep(1)
         txt=delta(btstart)
     print("beamtime ending")
-    with open('beamon',"w") as f:
+    with open(beamonfile,"w") as f:
         f.write("-")
-    with open('log.log',"a") as f:
+    with open(logfile,"a") as f:
         f.write(datetime.datetime.now().strftime("%H:%M:%S")+"  BEAM="+lastx+"\n")
     return
 
@@ -93,14 +144,14 @@ def detetime():
     while "-" not in txt:
         lastx=txt
         print("DETE_ON",txt)
-        with open('deteon',"w") as f:
+        with open(deteonfile,"w") as f:
             f.write( txt )
         time.sleep(1)
         txt=delta(dtstart)
     print("detector ending")
-    with open('deteon',"w") as f:
+    with open(deteonfile,"w") as f:
         f.write( "-" )
-    with open('log.log',"a") as f:
+    with open(logfile,"a") as f:
         f.write(datetime.datetime.now().strftime("%H:%M:%S")+"  DETE="+lastx+"\n")
     return
 
@@ -119,28 +170,37 @@ while True:
     i=i+1
     da2=datetime.datetime.now().strftime("%H:%M:%S")
     #da2=da.strftime("%H:%M:%S")
-    line=da2+" {:04d} ".format(i)+" "+data.decode("utf8").rstrip()
-    with open("log.log","a") as f:
+    #line=da2+" {:04d} ".format(i)+" "+data.decode("utf8").rstrip()
+    line=da2+" "+data.decode("utf8").rstrip()
+    with open(logfile,"a") as f:
         f.write( line+"\n" )
     print( line )
     if "BEAM_ON" in line:
         btstart=datetime.datetime.now()
         tbeam=threading.Thread( target=beamtime)
         tbeam.start()
-        if mmx!=0:
-            mmx[0:5]=b'start'
+        if mmxCNT!=0:
+            mmxCNT[0:5]=b'start'
         else:
             print(".mmap.1.vme cannot be operated")
     if "BEAM_OFF" in line:
         btstart=beginme+datetime.timedelta(days=999.1)
-        if mmx!=0:
-            mmx[0:4]=b'stop'
+        if mmxCNT!=0:
+            mmxCNT[0:4]=b'stop'
         else:
             print(".mmap.1.vme cannot be operated")
-    if "DET_READY" in line:
+    if "DET_RDY" in line:
         dtstart=datetime.datetime.now()
         tdete=threading.Thread( target=detetime)
         tdete.start()
-    if "DET_NOT_READY" in line:
+        if mmxVME!=0:
+            mmxVME[0:5]=b'start'
+        else:
+            print(".mmap.1.vme for VME cannot be operated")
+    if "DET_NRDY" in line:
         dtstart=beginme+datetime.timedelta(days=999.1)
+        if mmxVME!=0:
+            mmxVME[0:4]=b'stop'
+        else:
+            print(".mmap.1.vme for VME cannot be operated")
         
