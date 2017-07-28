@@ -132,7 +132,7 @@ while True:
         else:
             print(".mmap.1.vme cannot be operated")
     if "BEAM_OFF" in line:
-        btstart=beginme+datetime.timedelta(days=0.1)
+        btstart=beginme+datetime.timedelta(days=999.1)
         if mmx!=0:
             mmx[0:4]=b'stop'
         else:
@@ -142,5 +142,5 @@ while True:
         tdete=threading.Thread( target=detetime)
         tdete.start()
     if "DET_NOT_READY" in line:
-        dtstart=beginme+datetime.timedelta(days=0.1)
+        dtstart=beginme+datetime.timedelta(days=999.1)
         
