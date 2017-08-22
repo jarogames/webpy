@@ -10,12 +10,12 @@
    !!! WARNING
    it cannot be the same as VME-GREGORY
 
-ojr@zotac:~$ echo BEAM_ON | nc -u -w 1  localhost 10050 
+ojr@zotac:~$ echo BEAM_ON_ | nc -u -w 1  localhost 10050 
 ojr@zotac:~$ echo BEAM_OFF | nc -u -w 1  localhost 10050 
-ojr@zotac:~$ echo BEAM_ON | nc -u -w 1  localhost 10050 
+ojr@zotac:~$ echo BEAM_ON_ | nc -u -w 1  localhost 10050 
 ojr@zotac:~$ echo BEAM_OFF | nc -u -w 1  localhost 10050 
-ojr@zotac:~$ echo DET_READY | nc -u -w 1  localhost 10050 
-ojr@zotac:~$ echo DET_NOT_READY | nc -u -w 1  localhost 10050
+ojr@zotac:~$ echo DET_RDY_ | nc -u -w 1  localhost 10050 
+ojr@zotac:~$ echo DET_NRDY | nc -u -w 1  localhost 10050
 
 '''
 from socket import *
@@ -28,6 +28,9 @@ import os.path
 import mmap
 import contextlib
 import time
+
+CONTROLFILE=".mmap.1.vme"
+CONTROLFILE=".mmap.4.counter"
 
 #        Vadim UDP will run beam counter
 #                  and  vme run start
@@ -42,7 +45,7 @@ else:
     print("x...       GREGORY_CNT dir NOT defined")
     #os.chdir( os.environ['GREGORY'] )
     gregoryCNT_DIR=""
-mmapfileCNT=gregoryCNT_DIR+".mmap.1.vme"
+mmapfileCNT=gregoryCNT_DIR+CONTROLFILE
 #runnextfileCNT=gregoryCNT_DIR+"RUNNEXT"
 print("i...CNT mmap file:", mmapfileCNT)
 #print("i... RUNNEXT file:", runnextfileCNT)
@@ -55,7 +58,7 @@ else:
     print("x...       GREGORY_VME dir NOT defined")
     #os.chdir( os.environ['GREGORY'] )
     gregoryVME_DIR=""
-mmapfileVME=gregoryVME_DIR+".mmap.1.vme"
+mmapfileVME=gregoryVME_DIR+CONTROLFILE
 runnextfileVME=gregoryVME_DIR+"RUNNEXT"
 print("i...VME mmap file:", mmapfileVME)
 print("i... RUNNEXT file:", runnextfileVME)
@@ -182,13 +185,13 @@ while True:
         if mmxCNT!=0:
             mmxCNT[0:5]=b'start'
         else:
-            print(".mmap.1.vme cannot be operated")
+            print(CONTROLFILE," cannot be operated")
     if "BEAM_OFF" in line:
         btstart=beginme+datetime.timedelta(days=999.1)
         if mmxCNT!=0:
             mmxCNT[0:4]=b'stop'
         else:
-            print(".mmap.1.vme cannot be operated")
+            print(CONTROLFILE," cannot be operated")
     if "DET_RDY" in line:
         dtstart=datetime.datetime.now()
         tdete=threading.Thread( target=detetime)
@@ -196,11 +199,11 @@ while True:
         if mmxVME!=0:
             mmxVME[0:5]=b'start'
         else:
-            print(".mmap.1.vme for VME cannot be operated")
+            print(CONTROLFILE," for VME cannot be operated")
     if "DET_NRDY" in line:
         dtstart=beginme+datetime.timedelta(days=999.1)
         if mmxVME!=0:
             mmxVME[0:4]=b'stop'
         else:
-            print(".mmap.1.vme for VME cannot be operated")
+            print(CONTROLFILE, " for VME cannot be operated")
         
