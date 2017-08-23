@@ -29,37 +29,42 @@ import mmap
 import contextlib
 import time
 
-CONTROLFILE=".mmap.1.vme"
-CONTROLFILE=".mmap.4.counter"
+CONTROLFILE1=".mmap.1.vme"
+CONTROLFILE4=".mmap.4.counter"
 
 #        Vadim UDP will run beam counter
 #                  and  vme run start
 #   PUT GREGORY_CNT INTO myservice script!
 #    
 #
-gregoryCNT_DIR=os.environ.get('GREGORY_CNT')
-if gregoryCNT_DIR!=None:
-    print("+... GREGORY_CNT directory detected",gregoryCNT_DIR)
-    gregoryCNT_DIR=gregoryCNT_DIR+"/"
+gregory_DIR=os.environ.get('GREGORY')
+
+
+
+if gregory_DIR!=None:
+    print("+... GREGORY directory detected",gregory_DIR)
+    gregory_DIR=gregory_DIR+"/"
 else:
-    print("x...       GREGORY_CNT dir NOT defined")
+    print("x...       GREGORY dir NOT defined")
     #os.chdir( os.environ['GREGORY'] )
-    gregoryCNT_DIR=""
-mmapfileCNT=gregoryCNT_DIR+CONTROLFILE
-#runnextfileCNT=gregoryCNT_DIR+"RUNNEXT"
+    gregory_DIR=""
+mmapfileCNT=gregory_DIR+CONTROLFILE4
+#runnextfileCNT=gregory_DIR+"RUNNEXT"
 print("i...CNT mmap file:", mmapfileCNT)
 #print("i... RUNNEXT file:", runnextfileCNT)
 
-gregoryVME_DIR=os.environ.get('GREGORY_VME')
-if gregoryVME_DIR!=None:
-    print("+... GREGORY_VME directory detected",gregoryVME_DIR)
-    gregoryVME_DIR=gregoryVME_DIR+"/"
+
+
+#####gregory_DIR=os.environ.get('GREGORY_VME')
+if gregory_DIR!=None:
+    print("+... GREGORY_VME directory detected",gregory_DIR)
+    gregory_DIR=gregory_DIR+"/"
 else:
     print("x...       GREGORY_VME dir NOT defined")
     #os.chdir( os.environ['GREGORY'] )
-    gregoryVME_DIR=""
-mmapfileVME=gregoryVME_DIR+CONTROLFILE
-runnextfileVME=gregoryVME_DIR+"RUNNEXT"
+    gregory_DIR=""
+mmapfileVME=gregory_DIR+CONTROLFILE1
+runnextfileVME=gregory_DIR+"RUNNEXT"
 print("i...VME mmap file:", mmapfileVME)
 print("i... RUNNEXT file:", runnextfileVME)
 
@@ -102,10 +107,14 @@ def getMM_VME():
         print("x... NO ", mmapfileVME)
         return 0
 
+
+
+    
 mmxCNT=getMM_CNT()    # HERE I OPEN FILE CNT
 if mmxCNT!=0:mmxCNT.seek(0)
+
 mmxVME=0
-if gregoryVME_DIR!="":
+if gregory_DIR!="":
     mmxVME=getMM_VME()    # HERE I OPEN FILE VME
     if mmxVME!=0:mmxVME.seek(0)
 else:
@@ -178,6 +187,9 @@ while True:
     with open(logfile,"a") as f:
         f.write( line+"\n" )
     print( line )
+
+
+    
     if "BEAM_ON" in line:
         btstart=datetime.datetime.now()
         tbeam=threading.Thread( target=beamtime)
@@ -185,13 +197,17 @@ while True:
         if mmxCNT!=0:
             mmxCNT[0:5]=b'start'
         else:
-            print(CONTROLFILE," cannot be operated")
+            print(CONTROLFILE4," cannot be operated")
     if "BEAM_OFF" in line:
         btstart=beginme+datetime.timedelta(days=999.1)
         if mmxCNT!=0:
             mmxCNT[0:4]=b'stop'
         else:
-            print(CONTROLFILE," cannot be operated")
+            print(CONTROLFILE4," cannot be operated")
+
+
+
+            
     if "DET_RDY" in line:
         dtstart=datetime.datetime.now()
         tdete=threading.Thread( target=detetime)
@@ -199,11 +215,11 @@ while True:
         if mmxVME!=0:
             mmxVME[0:5]=b'start'
         else:
-            print(CONTROLFILE," for VME cannot be operated")
+            print(CONTROLFILE1," for VME cannot be operated")
     if "DET_NRDY" in line:
         dtstart=beginme+datetime.timedelta(days=999.1)
         if mmxVME!=0:
             mmxVME[0:4]=b'stop'
         else:
-            print(CONTROLFILE, " for VME cannot be operated")
+            print(CONTROLFILE1, " for VME cannot be operated")
         
