@@ -1,0 +1,12 @@
+#!/bin/bash
+
+cd ~/02_GIT/webpy
+#echo run UDP RECEIVER
+#sleep 1
+#screen -dmS udp bash -c "./udp.py"
+sleep 1
+echo run WEB03
+./web03_localmysql.py
+echo done
+sleep 4
+

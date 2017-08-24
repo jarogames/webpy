@@ -1,0 +1,11 @@
+#!/bin/bash
+
+cd ~/02_GIT/webpy
+export GREGORY_CNT=$HOME/02_GIT/serial.pl
+echo run UDP RECEIVER - gregory== $GREGORY_CNT
+#sleep 1
+echo udp needs GREGORY_CNT ... not GREGORY
+./udp.py
+echo done
+sleep 4
+
