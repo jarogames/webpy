@@ -1,3 +1,11 @@
+# REMAKE ALL
+
+- think about  webmap 2 flask
+- about counters to zmq flask
+
+
+
+
 # WEB Python interface
 
 
