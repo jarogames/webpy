@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import zmq
 import random
 import sys

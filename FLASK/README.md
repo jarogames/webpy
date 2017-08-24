@@ -15,3 +15,13 @@ with appache or other: http://flask.pocoo.org/docs/0.12/deploying/mod_wsgi/
 
 O proxy the standalone from your web server: 
 http://flask.pocoo.org/docs/0.12/deploying/wsgi-standalone/
+
+
+## Howto install ZMQ comet
+
+```
+ pip3 install Flask
+ pip3 install flask-sockets
+ pip3 install gevent
+
+```
