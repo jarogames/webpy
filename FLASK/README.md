@@ -23,5 +23,5 @@ http://flask.pocoo.org/docs/0.12/deploying/wsgi-standalone/
  pip3 install Flask
  pip3 install flask-sockets
  pip3 install gevent
-
+ pip3 install karellen-geventws
 ```
