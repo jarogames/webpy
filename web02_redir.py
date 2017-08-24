@@ -24,7 +24,7 @@ WEBHOME='/home/ojr/Maps'
 parser=argparse.ArgumentParser(description="""
 """)
 
-parser.add_argument('-w','--webhome',  default="/home/spiral2/SharedDisk/spiral2-web" , help='')
+parser.add_argument('-w','--webhome',  default="/home/ojr/spiral2-web" , help='')
 parser.add_argument('-p','--port',  default=8011,type=int , help='')
 parser.add_argument('-r','--redirect_to',  default="spiral2.ujf.cas.cz", help='')
 
@@ -62,17 +62,20 @@ def PrepareCNTS(WEBHOME, prefix):
     #    faraday=f.read().rstrip()
 
         
-    CMDCLONA='echo "select value,datetime from sensor1 order by datetime desc limit 1;" | mysql -u greis  -pgreis -h mojzis  monitoring | tail -1'
+    CMDCLONA='echo "select value,datetime from sensor4 order by datetime desc limit 1;" | mysql -u greis  -pgreis -h mojzis  monitoring | tail -1'
     r=subprocess.check_output( CMDCLONA,  shell=True ).decode('utf8').split()
     
     CMDFARAD='echo "select value,datetime from sensor9 order by datetime desc limit 1;" | mysql -u greis  -pgreis -h mojzis  monitoring | tail -1'
     rfa=subprocess.check_output( CMDFARAD,  shell=True ).decode('utf8').split()
 
-    CMDDEG='echo "select value,datetime from sensor8 order by datetime desc limit 1;" | mysql -u greis  -pgreis -h mojzis  monitoring | tail -1'
+    CMDDEG='echo "select value,datetime from sensor7 order by datetime desc limit 1;" | mysql -u greis  -pgreis -h mojzis  monitoring | tail -1'
     rde=subprocess.check_output( CMDDEG,  shell=True ).decode('utf8').split()
 
-    CMDELE='echo "select value,datetime from sensor7 order by datetime desc limit 1;" | mysql -u greis  -pgreis -h mojzis  monitoring | tail -1'
+    CMDELE='echo "select value,datetime from sensor8 order by datetime desc limit 1;" | mysql -u greis  -pgreis -h mojzis  monitoring | tail -1'
     rel=subprocess.check_output( CMDELE,  shell=True ).decode('utf8').split()
+
+    CMDT='echo "select value,datetime from sensor1 order by datetime desc limit 1;" | mysql -u greis  -pgreis -h mojzis  monitoring | tail -1'
+    rt=subprocess.check_output( CMDT,  shell=True ).decode('utf8').split()
 
     
     line=" <h3>COUNTERS - NFS/IC . <br>"+now.strftime("%H:%M:%S")+" </h3><br> \n<br>\n<table>"
@@ -81,11 +84,13 @@ def PrepareCNTS(WEBHOME, prefix):
     lines.append(line)
     line=" <tr align \"right\"><td>DEGRADER </td><td>: {:10.2f} &nbsp {}</td></tr>".format( float(rde[0]), rde[2] )
     lines.append(line)
-    line=" <tr align \"right\"><td>ELEKTRODA</td><td>: {:10.2f} &nbsp {}</td></tr>".format( float(rel[0]), rde[2] )
+    line=" <tr align \"right\"><td>ELEKTRODA</td><td>: {:10.2f} &nbsp {}</td></tr>".format( float(rel[0]), rel[2] )
     lines.append(line)
+    
     line=" <tr align \"right\" font size=\"18\" bgcolor=\"#FFAA55\"><td> <bf>FARADAY</bf>  </td><td><bf>: {:.2f} &nbsp {} </bf></td></tr>".format( float(rfa[0]), rfa[2]  )
     lines.append(line)
-    line=" <tr align \"right\"><td>T1       </td><td>: {:10.2f}</td></tr>".format( 0.0 )
+    line=" <tr align \"right\"><td>T1       </td><td>: {:10.2f}</td></tr>".format( float(rt[0]), rt[2]  )
+    
     lines.append(line)
     line=" <tr align \"right\"><td>T2       </td><td>: {:10.2f}</td></tr>  </font>".format( 0.0 )
     lines.append(line)
@@ -224,7 +229,7 @@ class myHandler(BaseHTTPRequestHandler):
                     self.send_response(200)
                     self.send_header('Content-type','text/html')
                     self.end_headers()
-                    responseNFS=PrepareCNTS(WEBHOME,'/nastro')
+                    responseNFS=PrepareCNTS(WEBHOME,'/nastro/nfs')
                     self.wfile.write(
                         bytes('<META HTTP-EQUIV="refresh" CONTENT="1"><html><body>'+responseNFS+'</body></html>','utf-8'))
                 else:
