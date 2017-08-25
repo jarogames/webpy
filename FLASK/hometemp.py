@@ -6,7 +6,9 @@ from flask_sockets import Sockets
 from flask import Flask, render_template
 import logging
 from gevent import monkey
+
 from random import randint
+import time
 ###############################
 #    chrome   Ctrl-F5 to refresh
 #https://www.tutorialspoint.com/flask/flask_templates.htm
@@ -53,23 +55,25 @@ def index():
 
 # this is called from JS - using reconnecting  /zeromq
 ## This will be renamed to 5minutes zmq
-# 
-@sockets.route('/zeromq5min')
+#
+#  now - it is autonomous !!!!!!!
+@sockets.route('/zeromq5min')  
 def send_data(ws):
     logger.info('Got a websocket connection, sending up data from zeromq5min HOME')
-    socket = context.socket(zmq.SUB)
-    socket.connect('tcp://localhost:{PORT}'.format(PORT=ZMQ_LISTENING_PORT))
-    socket.setsockopt_string(zmq.SUBSCRIBE, "")
-    poller = zmq.Poller()
-    poller.register(socket, zmq.POLLIN)
+    #socket = context.socket(zmq.SUB)
+    #socket.connect('tcp://localhost:{PORT}'.format(PORT=ZMQ_LISTENING_PORT))
+    #socket.setsockopt_string(zmq.SUBSCRIBE, "")
+    #poller = zmq.Poller()
+    #poller.register(socket, zmq.POLLIN)
     gevent.sleep()
     received = 0
     while True:
         received += 1
         # socks = dict(poller.poll())
         # if socket in socks and socks[socket] == zmq.POLLIN:
-        data = socket.recv_json()
-        logger.info('i dont care BUT copy : '+str(received)+str(data))
+        ##############
+        #data = socket.recv_json()
+        #logger.info('i dont care BUT copy : '+str(received)+str(data))
         MESSAGE=[]
         files=[ 'rain.jpg', 'tempin.jpg', 'dew.jpg', 'humid.jpg', 'degrees.jpg', 'camradar.gif' ]
         rand=randint(0,999999)
@@ -80,6 +84,7 @@ def send_data(ws):
         #ws.send(json.dumps(data))
         ws.send( "\n".join(MESSAGE) )
         logger.info("\n".join(MESSAGE)  )
+        time.sleep(60)
         gevent.sleep()
         ############################
 
