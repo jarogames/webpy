@@ -1,7 +1,7 @@
 *~
 nfs.mysql
 __pycache__
-static/*jpg
-static/*png
-static/*gif
+FLASK/static/*jpg
+FLASK/static/*png
+FLASK/static/*gif
 
