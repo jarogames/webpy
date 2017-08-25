@@ -1,0 +1,120 @@
+<html>
+  <head>
+    <!-- META HTTP-EQUIV="refresh" CONTENT="120"  -->
+    <style>
+      * { padding: 1px; margin: 0px; }
+      .ast{ background-color:white;
+      color:black; font: 78px MS Sans Serif;
+      padding: 1px;
+      margin: 0px;
+      width:350px;
+      height:300px;
+      text-align:center;
+      }
+      .fit {
+      /* set relative picture size */
+      max-width: 100%;
+      max-height: 100%;
+      }
+      .floated_img { float: left; }
+      .floated_cam { float: right; }
+      .center {
+      display: block;
+      margin: auto;
+      }
+    </style>
+    
+    <script>
+      function startTime() {
+      var today = new Date();
+      var h = today.getHours();
+      var m = today.getMinutes();
+      var s = today.getSeconds();
+      var D = today.getDate();
+      var M = today.getMonth()+1;
+      var Y = today.getFullYear();
+      if (m < 10) {m = "0" + m};
+      if (s < 10) {s = "0" + s};
+	 document.getElementById('clock').innerHTML=h+":"+m+":"+s +"<br>"+ D+"."+M+"."+Y;
+      var t = setTimeout(startTime, 500);
+          }
+ </script>
+  </head>
+  
+  <body bgcolor="576174" onload="startTime()">
+
+   <div class="container">
+
+    
+    <div class="floated_cam">
+      <!--a href="http://localhost:9180"><img src="logocamera.png" ></a-->
+    </div>
+    <div class="floated_img">
+      <div id="clock" class="ast"> clock: </div >
+    </div>
+
+    
+    <!--div class="floated_img">
+      <a href="tempin.html">
+	<img width="350px" height="300px" src="{{url_for('static', filename='tempin.jpg')}}" ></a>
+    </div>
+
+    <div class="floated_img">
+      <a href="dew.html">
+	<img width="350px" height="300px" src="{{url_for('static', filename='dew.jpg')}}" ></a>
+    </div>
+
+    <div class="floated_img">
+      <a href="humid.html">
+	<img width="350px" height="300px" src="{{url_for('static', filename='humid.jpg')}}" ></a>
+    </div>
+
+    <div class="floated_img">
+      <a href="rain.html">
+	<img width="350px" height="300px" src="{{url_for('static', filename='rain.jpg')}}" ></a>
+    </div>
+
+    <div class="floated_img">
+      <a href="degrees.html">
+	<img width="350px" height="300px" src="{{url_for('static', filename='degrees.jpg')}}" ></a>
+    </div>
+
+    <div class="floated_img">
+      <a href="http://radar.bourky.cz"> <img width="350px" height="300px" src="{{url_for('static', filename='camradar.gif')}}" ></a>
+    </div-->
+
+
+
+    
+    <!--a href="mapa_act.html"> <img width="350px" height="300px" src="mapa_act.jpg" ></a-->
+    <!--div class="floated_img"> 
+
+      <a href="pingmaphome.html">
+	<img width="350px" height="300px" src="{{url_for('static', filename='pingmaphome.jpg')}}" ></a>
+    </div-->
+
+    <!--div class="floated_img"> <img width=100 src="phiphid04.png" > </div> <div class="floated_img"> <img width=100 src="phiphid05.png" > </div> <div class="floated_img"> <img width=100 src="phipi.png" > </div -->
+
+    <!--div class="floated_cam">
+      <a href="http://fedo:9181">
+	<img src="{{url_for('static', filename='logocamera.png')}}" ></a>
+    </div-->
+
+    
+    <!-- onclick replaces port for text -->
+    <!--div class="floated_cam">
+      <a href="http://fedo:9180">
+	<img src="logocamera.png" ></a>
+    </div-->
+
+    <div id="latest_data"></div>
+    </div>
+    <!--script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script-->
+    <script type="text/javascript" src="static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="static/js/reconnecting-websocket.min.js"></script>
+    <!--script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.6/d3.min.js"></script-->
+    <script type="text/javascript" src="static/js/d3.min.js"></script>
+    <script type="text/javascript" src="static/js/application5min.js"></script>
+    
+  </body>
+</html>
