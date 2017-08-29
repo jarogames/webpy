@@ -1,4 +1,9 @@
 #!/usr/bin/python3
+##############################
+#  FALSK SERVER  port 25000
+#  zmq   port 12000
+#  sending data from 12000 to 25000
+##############################
 import zmq.green as zmq
 import json
 import gevent
