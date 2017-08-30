@@ -50,23 +50,62 @@ def send_data(ws):
         received += 1
         # socks = dict(poller.poll())
         # if socket in socks and socks[socket] == zmq.POLLIN:
-        #data = socket.recv_json()
-        recvd=socket.recv().decode("utf8").rstrip()
-        print("zeromq ", recvd)
+        
+        data = socket.recv_json()
+        print("zeromqlog --- ", data )
+        
+        #recvd=socket.recv().decode("utf8").rstrip() # from c++ only num
+        #recvd=socket.recv().decode("utf8") # from c++ only num
+        #print("zeromq received: /{}/".format( recvd)  )
+        
         #data.insert(0, recvd )
         #if len(data)>28:
         #    data.pop()
-        #print("zeromqlog --- ", data )
-        logger.info( str(received) + str(data) )
-        #ws.send(json.dumps(data))
+        #logger.info( str(received) + str(data) )
         #  courier.html has {{text|safe}}
         #mustr=render_template( "currents_table.html", data=data )
-        #print(mustr)
-        ws.send( recvd )
+        ####print(mustr)
+        #ws.send( recvd )
+
+        for v,chan in data.items():
+            #print(v)
+            if v!='time':
+                if int( chan['Rate'])>1.0:
+                    data[ str(v) ]['Rcolor']='lightsalmon'
+                if int( chan['Rate'])>2.0:
+                    data[ str(v) ]['Rcolor']='coral'
+                if int( chan['Rate'])>3.0:
+                    data[ str(v) ]['Rcolor']='tomato'
+                if int( chan['Rate'])>4.0:
+                    data[ str(v) ]['Rcolor']='orangered'
+                if int( chan['Rate'])>4.0:
+                    data[ str(v) ]['Rcolor']='salmon'
+                if int( chan['Rate'])>5.0:
+                    data[ str(v) ]['Rcolor']='indianred'
+                #-----------------------------------
+                if int( chan['PileUp'])>1.0:
+                    data[ str(v) ]['Pcolor']='lightsalmon'
+                if int( chan['PileUp'])>2.0:
+                    data[ str(v) ]['Pcolor']='coral'
+                if int( chan['PileUp'])>3.0:
+                    data[ str(v) ]['Pcolor']='tomato'
+                if int( chan['PileUp'])>4.0:
+                    data[ str(v) ]['Pcolor']='orangered'
+                if int( chan['PileUp'])>4.0:
+                    data[ str(v) ]['Pcolor']='salmon'
+                if int( chan['PileUp'])>5.0:
+                    data[ str(v) ]['Pcolor']='indianred'
+        #d = json.loads( data )
+        #d['time'] = 'green'
+        #d['2']['Pcolor'] = 'red'
+        #data.set_data(json.dumps(d))
+        
+        mustr=render_template( "gregory_run.html", data=data )
+        ws.send( mustr )
         gevent.sleep()
 
 if __name__ == '__main__':
-    logger.info('Launching web server on '+str(HTML_PORT))
+    logger.info('Launching web server on '+str(HTML_PORT)+" zmq on 12005")
     from gevent import pywsgi
     from geventwebsocket.handler import WebSocketHandler
     server=pywsgi.WSGIServer(('',HTML_PORT),app,handler_class=WebSocketHandler)

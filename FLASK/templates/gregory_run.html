@@ -1,0 +1,24 @@
+<span style="font-family: Courier;font-size:12pt; font-weight:bold;">
+  <table>
+
+    {{data.time}}
+    <tr><th> Channel</th><th> Rate [kHz]</th><th> PileUp [%]</th></tr>
+
+    {% for key,chan in data.items()|sort() %}
+    {% if key!='time' %}
+    <tr>
+      <td>{{key}}: </td>
+      <td><span style="background-color:{{chan.Rcolor}}">{{ chan.Rate }}  </span> </td>
+      <td><span style="background-color:{{chan.Pcolor}}">{{ chan.PileUp }}  </span> </td>
+    </tr>
+    {% endif  %}
+    {% endfor %}
+
+  </table>
+  <hr>
+</span>
+<span style="font-family: Courier;font-size:12pt; ">
+  {% for i in data.log %}
+  {{ i }}<br>
+  {% endfor %}
+</span>
