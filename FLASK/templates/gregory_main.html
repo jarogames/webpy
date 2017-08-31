@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Gregory RUN Port 12005</title>
+
+<head>
+<script type="text/javascript">
+    <!--
+    function updateTime() {
+        var currentTime = new Date();
+        var hours = currentTime.getHours();
+        var minutes = currentTime.getMinutes();
+        var seconds = currentTime.getSeconds();
+        if (minutes < 10){
+            minutes = "0" + minutes;
+        }
+        if (seconds < 10){
+            seconds = "0" + seconds;
+        }
+        var v = hours + ":" + minutes + ":" + seconds + " ";
+        setTimeout("updateTime()",200);
+        document.getElementById('time').innerHTML=v;
+    }
+    updateTime();
+    //-->
+</script>
+  
+        <!-- Plotly.js -->
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+
+
+
+  <body>
+    <div class="container" id="parala" style="width:100%;display:table;">
+      <div id="time1" style="display:table-cell;">
+	<!--div class="container"-->
+	<!--- h3> Currents file -  zmq port 12002! </h3-->
+	<h3> Local PC time:  <span id="time"/></h3>
+      </div>
+      <div id="cont2" style="display:table-cell;">
+	<form method="POST">
+	  <select name="hist" >
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+          </select>
+	  <button type="submit">Go</button>
+	</form>
+      </div>
+    </div>
+      <div id="latest_data"></div>
+    </div>
+
+    
+    <!--script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script-->
+    <script type="text/javascript" src="static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="static/js/reconnecting-websocket.min.js"></script>
+    <!--script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.6/d3.min.js"></script-->
+    <script type="text/javascript" src="static/js/d3.min.js"></script>
+    <script type="text/javascript" src="static/js/application_log.js"></script>
+
+
+
+
+     <!-- Plotly chart will be drawn inside this DIV -->
+<div id="myDiv" style="height:300px"></div>
+ <script>
+var trace1={x:[1,2,3],y:[5,6,5],type:'scatter'}
+ var layout = {
+      yaxis: {title: "SpectrumM"},       // set the y axis title
+      xaxis: {
+        showgrid: true,                  // remove the x-axis grid lines
+		       },
+      margin: {       // update the left, bottom, right, top margin
+        l: 70, b: 40, r: 40, t: 40
+		       },
+ };
+
+     Plotly.newPlot('myDiv', [trace1] , layout);
+ </script>
+ 
+ <script>
+ trace1={x:[1,2,3],y:[2,3,4],type:'scatter'}
+</script>
+
+ <script>
+     Plotly.newPlot('myDiv', [trace1] , layout);
+ </script>
+
+ 
+  </body>
+</html>
