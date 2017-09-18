@@ -66,6 +66,9 @@ def index():
 def images(zoom,lat,lonpng):
     #logger.info('images from '+HOMEMAPS )
     appendix=zoom+"/"+lat+"/"+lonpng
+    lon=lonpng.split('.')[0]
+    #12 /
+    print("==============",appendix)
     localdir=HOMEMAPS.rstrip('/')+"/"+zoom+"/"+lat
     fullpath = HOMEMAPS.rstrip('/')+"/"+appendix
     logger.info('images from '+fullpath )
@@ -79,7 +82,13 @@ def images(zoom,lat,lonpng):
         zoom=int(zoom)
         if (zoom==15) or(zoom==12):
             url='http://a.tile.komoot.de/komoot-2/'+appendix
-        elif (zoom==8) or(zoom==5):
+        elif (zoom==8):
+            #url='http://tile.openstreetmap.org/'+appendix
+            #url='http://mt0.google.com/vt/lyrs=m&hl=en&x=%d&y=%d&z=%d'
+            url='http://mt0.google.com/vt/lyrs=m&hl=en&x='+str(lat)+'&y='+str(lon)+'&z='+str(zoom)
+            #url='http://tile.openstreetmap.org/'+appendix
+            #https://maps.wikimedia.org/#4/40.75/-73.96
+        elif (zoom==5):
             url='http://tile.openstreetmap.org/'+appendix
             #https://maps.wikimedia.org/#4/40.75/-73.96
         else:
