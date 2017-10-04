@@ -86,6 +86,7 @@ def images(zoom,lat,lonpng):
             #url='http://tile.openstreetmap.org/'+appendix
             #url='http://mt0.google.com/vt/lyrs=m&hl=en&x=%d&y=%d&z=%d'
             url='http://mt0.google.com/vt/lyrs=m&hl=en&x='+str(lat)+'&y='+str(lon)+'&z='+str(zoom)
+            time.sleep(0.3)
             #url='http://tile.openstreetmap.org/'+appendix
             #https://maps.wikimedia.org/#4/40.75/-73.96
         elif (zoom==5):
