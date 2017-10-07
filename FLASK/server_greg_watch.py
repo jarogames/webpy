@@ -52,9 +52,9 @@ def getListHist(board=0):
     try:
         with open( nam ,"r") as f:
             lis=list(map( str.strip , f ))
+            f.close()
             lis=[x for x in lis if not x.startswith('#')]
             lis=list(map( int , lis ))
-            f.close()
     except:
         return nam,[]
     return nam,lis
