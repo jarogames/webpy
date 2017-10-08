@@ -4,4 +4,5 @@ __pycache__
 FLASK/static/*jpg
 FLASK/static/*png
 FLASK/static/*gif
-
+# binary test
+FLASK/zmq_gregory
