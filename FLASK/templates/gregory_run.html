@@ -1,0 +1,43 @@
+
+<span style="font-family: Courier;font-size:12pt; font-weight:bold;">
+Measurement time: {{data.time}}
+  <div id="tables" style="display:table;width:100%;">
+    {% for key,board in data.items()|sort() %}
+    {% if key!='time' and key!='histoy' and key!='histox' and key!='filename'  %}
+
+    <div id="BOARD{{key}}" style="display:table-cell;width:200px;">
+
+  <table style="border: 1px solid black;">
+    <tr><th>  Chan</th><th> Rate [kHz]</th><th> PileUp [%]</th></tr>
+    {% for k2,chan in board.items()|sort() %}
+    <tr>
+      <td>{{k2}}</td>
+      <td><span style="background-color:{{chan.Rcolor}}">{{chan.Rate}}</span></td>
+      <td><span style="background-color:{{chan.Pcolor}}">{{chan.PileUp}}</span></td>
+    </tr>
+    {% endfor %}
+      </table>
+  </div>
+    {% endif %}
+    {% endfor %}
+  </div>
+
+  
+  <hr>
+</span>
+<!-- LOG GOES HERE -->
+<!--span style="font-family: Courier;font-size:12pt; ">
+  {% for i in data.log %}
+  {{ i }}<br>
+  {% endfor %}
+</span-->
+
+ <script>
+   trace1={
+   x:{{data.histox}},
+   y:{{data.histoy}},
+   type:'scatter'
+   }
+   layout['yaxis']['title']={{Ahoj}}
+   Plotly.newPlot('myDiv', [trace1] , layout);
+</script>

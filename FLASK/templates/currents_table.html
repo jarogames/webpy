@@ -1,0 +1,18 @@
+<span style="font-family: Courier;font-size:12pt; font-weight:bold;">
+  <table>
+   
+   <tr><th> Materiel</th><th> Current</th><th> SQL time</th></tr>
+    <tr><td>CLONA: &nbsp;</td><td>{{ data.clona }} </td><td>&nbsp; <span style="background-color:{{data.clonacolor}}">{{ data.clonatime }}  </span> </td><td></tr>
+
+    <tr><td>DEGRADER: </td><td>{{ data.degrader }} </td><td>&nbsp; <span style="background-color:{{data.degradercolor}}">{{ data.degradertime }}  </span> </td><td></tr>
+
+    <tr><td>FARADAY: </td><td>{{ data.faraday }} </td><td>&nbsp; <span style="background-color:{{data.faradaycolor}}">{{ data.faradaytime }}  </span> </td><td></tr>
+
+  </table>
+  <hr>
+</span>
+<span style="font-family: Courier;font-size:12pt; ">
+  {% for i in data.log %}
+  {{ i }}<br>
+  {% endfor %}
+</span>
