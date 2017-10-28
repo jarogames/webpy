@@ -75,7 +75,7 @@ def send_data(ws):
         #data = socket.recv_json()
         #logger.info('i dont care BUT copy : '+str(received)+str(data))
         MESSAGE=[]
-        files=[ 'rain.jpg', 'tempin.jpg', 'dew.jpg', 'humid.jpg', 'degrees.jpg', 'camradar.gif' ]
+        files=[ 'rain.jpg', 'tempin.jpg', 'dew.jpg', 'humid.jpg', 'camradar.gif' ]
         rand=randint(0,999999)
         for fi in files:
             copyfile("/tmp/{}".format(fi),   "./static/{}".format(fi) )
@@ -106,6 +106,6 @@ if __name__ == '__main__':
     from gevent import pywsgi
     from geventwebsocket.handler import WebSocketHandler
     server = pywsgi.WSGIServer(('', 25000), app, handler_class=WebSocketHandler)
-    logger.info('Starting serving')
+    logger.info('Starting serving on port 25000')
     server.serve_forever()
     
