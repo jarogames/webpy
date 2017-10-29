@@ -77,7 +77,7 @@ def index():
         print("GET=====================")
         #return render_template('contact.html', form=form)
     logger.info('Rendering index page')
-    return render_template('gregory_main.html')
+    return render_template('shownet_main.html')
 
 
 

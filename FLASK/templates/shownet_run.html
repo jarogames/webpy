@@ -1,0 +1,58 @@
+
+<span style="font-family: Courier;font-size:12pt; font-weight:bold;">
+  ZMQ time: {{data.time}}
+  <!-- hr>
+  < {{data.pings }} -->
+  
+<IMG STYLE="position:absolute; TOP:90px; LEFT:1px; WIDTH:400px; HEIGHT:800px;background:white;" SRC="static/home_map.png">
+
+
+  <div id="tables" style="display:table;width:100%;position:absolute; TOP:90px; LEFT:350px;">
+  <table style="border: 1px solid black;">
+    <tr><th>  name </th> <th>ip</th> <th> Result</th></tr>
+    <!------------------------------------>
+    {%for v in data.pings %}
+    <!-- {{v.ip}} -->
+    <tr>
+      <td><span style="background-color:{{v.col}}">{{v.name}}</span> </td>
+      <td>{{v.ip}}</span> </td>
+      <td><span style="background-color:{{v.col}}">{{v.status}}</span> </td>
+    </tr>
+    {%endfor %}
+    <!----------------------------------->
+  </table>
+</div>
+
+ 
+<hr>
+
+
+<IMG title="fedo" STYLE="position:absolute; TOP:295px; LEFT:150px; WIDTH:30px; HEIGHT:30px;background:{{data.fedo}};" SRC="static/icon_pc.png">
+
+<IMG title="laptop" STYLE="position:absolute; TOP:325px; LEFT:120px; WIDTH:30px; HEIGHT:30px;background:red;" SRC="static/icon_laptop.png">
+
+
+<!--      
+#pix1  garage audio
+#pix2 kuchyne
+#pix3 new camera
+#pix4 solar         -->
+
+<IMG title="pix1 audiogarage"  STYLE="position:absolute; TOP:225px; LEFT:40px; WIDTH:30px; HEIGHT:30px;background:{{data.pix1}};" SRC="static/icon_raspi.png">
+<IMG title="pix2 kuchyn" STYLE="position:absolute; TOP:275px; LEFT:100px; WIDTH:30px; HEIGHT:30px;background:{{data.pix2}};" SRC="static/icon_raspi.png">
+
+
+
+
+<IMG title="pib" STYLE="position:absolute; TOP:195px; LEFT:120px; WIDTH:30px; HEIGHT:30px;background:{{data.pib}};" SRC="static/icon_raspicam.png">
+<IMG title="pi3" STYLE="position:absolute; TOP:225px; LEFT:270px; WIDTH:30px; HEIGHT:30px;background:{{data.pi3}};" SRC="static/icon_raspicam.png">
+<IMG title="pix4 solar" STYLE="position:absolute; TOP:805px; LEFT:70px; WIDTH:30px; HEIGHT:30px;background:{{data.pix4}};" SRC="static/icon_raspicam.png">
+
+</span>
+<!-- LOG GOES HERE -->
+<!--span style="font-family: Courier;font-size:12pt; ">
+  {% for i in data.log %}
+  {{ i }}<br>
+  {% endfor %}
+</span-->
+

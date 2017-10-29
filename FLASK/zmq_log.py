@@ -21,6 +21,13 @@ port = "12001"
 #    then -  tail -f :
 #https://stackoverflow.com/questions/5419888/reading-from-a-frequently-updated-file
 
+print("i... I will look at the file   gregory_run.log")
+print("i...     in the GREGORY PATH")
+print("i...     with that file I watch for changes...")
+print("s...     server is keeping last x lines for display")
+###########################
+#
+##########################
 def follow(thefile):
     thefile.seek(0,2)
     while True:
@@ -43,8 +50,12 @@ if __name__ == '__main__':
 ##### LOG FILE ====================
     LFILENAME=gregorydir+"/gregory_run.log"
     print( LFILENAME )
-    logfile = open( LFILENAME  , "r")
-    loglines = follow(logfile)
+    try:
+        logfile = open( LFILENAME  , "r")
+        loglines = follow(logfile)
+    except:
+        print("!... my FILE NOT found")
+        loglines=["My file not found ... 1"]
 ##### connect ==================
     context = zmq.Context()
     socket = context.socket(zmq.PUB)

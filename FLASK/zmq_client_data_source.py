@@ -8,7 +8,7 @@ from random import randint
 
 import datetime
 
-port = "12000"
+port = "11999"
 
 context = zmq.Context()
 socket = context.socket(zmq.PUB)

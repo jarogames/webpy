@@ -20,8 +20,8 @@ logger = logging.getLogger(__name__)
 
 sockets = Sockets(app)
 context = zmq.Context()
-
-ZMQ_LISTENING_PORT = 12000
+HTML_PORT=24999
+ZMQ_LISTENING_PORT = 11999
 
 @app.route('/')
 def index():
@@ -51,7 +51,7 @@ if __name__ == '__main__':
     logger.info('Launching web server')
     from gevent import pywsgi
     from geventwebsocket.handler import WebSocketHandler
-    server = pywsgi.WSGIServer(('', 25000), app, handler_class=WebSocketHandler)
+    server = pywsgi.WSGIServer(('', HTML_PORT), app, handler_class=WebSocketHandler)
     logger.info('Starting serving')
     server.serve_forever()
     
