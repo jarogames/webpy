@@ -123,5 +123,5 @@ if __name__ == '__main__':
         print( "sending:" , message )
         socket.send_string( message )
         ###socket.send( message )
-        time.sleep(10)
+        time.sleep(30)
 
