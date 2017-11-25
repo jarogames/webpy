@@ -26,7 +26,7 @@ sockets = Sockets(app)
 context = zmq.Context()
 
 
-HTML_PORT=25005
+HTTP_PORT=25005
 ZMQ_LISTENING_PORT = 12005 # 
 
 ##### GREGORY DIR  ======================
@@ -180,10 +180,10 @@ if __name__ == '__main__':
 
 
     
-    logger.info('Launching web server on '+str(HTML_PORT)+" zmq on 12005")
+    logger.info('Launching web server on '+str(HTTP_PORT)+" zmq on 12005")
     from gevent import pywsgi
     from geventwebsocket.handler import WebSocketHandler
-    server=pywsgi.WSGIServer(('',HTML_PORT),app,handler_class=WebSocketHandler)
+    server=pywsgi.WSGIServer(('',HTTP_PORT),app,handler_class=WebSocketHandler)
     logger.info('Starting serving')
     server.serve_forever()
     

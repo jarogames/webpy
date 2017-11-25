@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 sockets = Sockets(app)
 context = zmq.Context()
 
-HTML_PORT=25001
+HTTP_PORT=25001
 ZMQ_LISTENING_PORT = 12001 # send log after push
 
 @app.route('/')
@@ -63,10 +63,10 @@ def send_data(ws):
         gevent.sleep()
 
 if __name__ == '__main__':
-    logger.info('Launching web server on '+str(HTML_PORT))
+    logger.info('Launching web server on '+str(HTTP_PORT))
     from gevent import pywsgi
     from geventwebsocket.handler import WebSocketHandler
-    server=pywsgi.WSGIServer(('',HTML_PORT),app,handler_class=WebSocketHandler)
+    server=pywsgi.WSGIServer(('',HTTP_PORT),app,handler_class=WebSocketHandler)
     logger.info('Starting serving')
     server.serve_forever()
     
