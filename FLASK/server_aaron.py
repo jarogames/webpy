@@ -16,10 +16,14 @@ from gevent import monkey
 
 from random import randint
 from shutil import copyfile  # COPY FROM TMP
+import time
 
 monkey.patch_all()
 
 app = Flask(__name__)
+app.config['DEBUG'] = True  # DO NOT USE IN PRODUCTION 
+
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -70,7 +74,7 @@ def send_data(ws):
             MESSAGE.append( '<div class="floated_img">'+MSG+'</div>' )
         ws.send(  "\n".join(MESSAGE) )
         logger.info("\n".join(MESSAGE)  )
-        time.sleep(60)
+        time.sleep(15)
         gevent.sleep()
         ######################
 

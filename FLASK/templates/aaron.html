@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>AARON Port 12006</title>   <!-- META HTTP-EQUIV="refresh" CONTENT="120"  -->
+    <title>AARON Port 12006</title> 
     <style>
       * { padding: 1px; margin: 0px; }
       .ast{ background-color:white;
@@ -37,7 +37,7 @@
       if (m < 10) {m = "0" + m};
       if (s < 10) {s = "0" + s};
 	 document.getElementById('clock').innerHTML=h+":"+m+":"+s +"<br>"+ D+"."+M+"."+Y;
-      var t = setTimeout(startTime, 500);
+      var t = setTimeout(startTime, 5000);
           }
  </script>
     
@@ -46,17 +46,18 @@
 
 
   
-  <body bgcolor="576174" onload="startTime()">
+  <!-- body bgcolor="576174" onload="startTime()" -->
+  <body bgcolor="576174">
     <div class="container">
      
        <div class="floated_img">
           <div id="clock" class="ast"> clock: </div >
        </div>
 
-       <div class="floated_img">
+       <!--iv class="floated_img">
 	 <img  width="350px" height="300px" src="/static/counters.jpg"></img>
-	 <!--img  width="350px" height="300px" src="/static/streampic_00.jpg"></img-->
-       </div>
+	 <!--img  width="350px" height="300px" src="/static/streampic_00.jpg"></img>
+       </div-->
 
        <div id="latest_data"></div>
 
