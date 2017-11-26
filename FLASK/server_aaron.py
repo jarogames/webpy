@@ -1,4 +1,10 @@
 #!/usr/bin/python3
+##################################
+#
+#  FLASK WEBSITE   port 25001
+#      just sending data from zmq
+#     zmq 12001 
+##################################
 import zmq.green as zmq
 import json
 import gevent
@@ -7,22 +13,16 @@ from flask import Flask, render_template
 import logging
 from gevent import monkey
 
-from random import randint
-import time
-###############################
-#    chrome   Ctrl-F5 to refresh
-#https://www.tutorialspoint.com/flask/flask_templates.htm
-###
 
+from random import randint
 from shutil import copyfile  # COPY FROM TMP
-import os,sys
+import time
 
 monkey.patch_all()
 
-#app = Flask(__name__, static_url_path = "/tmp", static_folder = "tmp" ) # disk location; 'static'
-app = Flask(__name__, static_folder = "static" ) # disk location; 'static'
+app = Flask(__name__)
+app.config['DEBUG'] = True  # DO NOT USE IN PRODUCTION 
 
-#app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -30,10 +30,10 @@ logger = logging.getLogger(__name__)
 sockets = Sockets(app)
 context = zmq.Context()
 
-HTTP_PORT = 25000
-ZMQ_LISTENING_PORT = 12000
+HTTP_PORT=25006
+ZMQ_LISTENING_PORT = 12006 # send log after push
 
-
+############################## THIS IS EXTRA HOOMETEMP
 @app.before_request
 def before_every_request():
     logger.info("before request")
@@ -47,47 +47,36 @@ def add_header(response):
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '-1'
     return response
-
+########################################
 
 @app.route('/')
 def index():
     logger.info('Rendering index page')
-    return render_template('hometemp.html')
+    return render_template('aaron.html')
 
-# this is called from JS - using reconnecting  /zeromq
-## This will be renamed to 5minutes zmq
-#
-#  now - it is autonomous !!!!!!!
-@sockets.route('/zeromq5min')  
+##################
+#   my flask ZMQ is always SUBscribe to PUBlisher
+@sockets.route('/zeromq1min')   # AUTONOMOUS AS IN hometemp:
 def send_data(ws):
-    logger.info('Got a websocket connection, sending up data from zeromq5min HOME')
-    #socket = context.socket(zmq.SUB)
-    #socket.connect('tcp://localhost:{PORT}'.format(PORT=ZMQ_LISTENING_PORT))
-    #socket.setsockopt_string(zmq.SUBSCRIBE, "")
-    #poller = zmq.Poller()
-    #poller.register(socket, zmq.POLLIN)
+    logger.info('Got a websocket connection log')
     gevent.sleep()
     received = 0
     while True:
         received += 1
-        # socks = dict(poller.poll())
-        # if socket in socks and socks[socket] == zmq.POLLIN:
-        ##############
-        #data = socket.recv_json()
-        #logger.info('i dont care BUT copy : '+str(received)+str(data))
         MESSAGE=[]
-        files=[ 'rain.jpg', 'tempin.jpg', 'dew.jpg', 'humid.jpg', 'camradar.gif' ]
+        files=[ 'counters.jpg', 'streampic_00.jpg']
+        print("i... in the loop before rand")
         rand=randint(0,999999)
         for fi in files:
+            print("i... file",fi)
             copyfile("/tmp/{}".format(fi),   "./static/{}".format(fi) )
             MSG='<img width="350px" height="300px" src="/static/{}?a={:d}">'.format( fi, rand )
             MESSAGE.append( '<div class="floated_img">'+MSG+'</div>' )
-        #ws.send(json.dumps(data))
-        ws.send( "\n".join(MESSAGE) )
+        ws.send(  "\n".join(MESSAGE) )
         logger.info("\n".join(MESSAGE)  )
-        time.sleep(60)
+        time.sleep(15)
         gevent.sleep()
-        ############################
+        ######################
 
 @app.route("/static/<path:path>")
 def images(path):
@@ -98,15 +87,11 @@ def images(path):
     resp.content_type = "image/jpeg"
     return resp
 
-
-
-
-
 if __name__ == '__main__':
-    logger.info('Launching web server')
+    logger.info('Launching web server on '+str(HTTP_PORT))
     from gevent import pywsgi
     from geventwebsocket.handler import WebSocketHandler
-    server = pywsgi.WSGIServer(('', HTTP_PORT), app, handler_class=WebSocketHandler)
-    logger.info('Starting serving on '+str(HTTP_PORT))
+    server=pywsgi.WSGIServer(('',HTTP_PORT),app,handler_class=WebSocketHandler)
+    logger.info('Starting serving')
     server.serve_forever()
     
