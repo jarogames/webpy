@@ -76,7 +76,7 @@ def send_data(ws):
         #data = socket.recv_json()
         #logger.info('i dont care BUT copy : '+str(received)+str(data))
         MESSAGE=[]
-        files=[ 'rain.jpg', 'tempin.jpg', 'dew.jpg', 'humid.jpg', 'degrees.jpg', 'camradar.gif' ]
+        files=[ 'rain.jpg', 'tempin.jpg', 'dew.jpg', 'humid.jpg', 'camradar.gif' ]
         rand=randint(0,999999)
         for fi in files:
             copyfile("/tmp/{}".format(fi),   "./static/{}".format(fi) )
