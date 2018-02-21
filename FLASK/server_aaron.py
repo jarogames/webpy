@@ -92,6 +92,7 @@ if __name__ == '__main__':
     from gevent import pywsgi
     from geventwebsocket.handler import WebSocketHandler
     server=pywsgi.WSGIServer(('',HTTP_PORT),app,handler_class=WebSocketHandler)
-    logger.info('Starting serving')
+    logger.info('Starting serving on '+str(HTTP_PORT) )
+    logger.info('... AUTONOMOUS SERVER ...')
     server.serve_forever()
     
