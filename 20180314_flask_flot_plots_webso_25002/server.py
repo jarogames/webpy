@@ -59,7 +59,7 @@ def index():   # gets from ./templates/
 #
 @sockets.route('/send_data')   # AUTONOMOUS 
 def send_data(ws):
-    seconds=1
+    seconds=0.1
     logger.info('Got a websocket connection log ... send_data; reload every '+str(seconds)+' sec.')
     gevent.sleep()
     received = 0
