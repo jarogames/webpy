@@ -16,7 +16,7 @@ import os,sys
 import fileinput     # read from stdin
 #--------------------------- MYSQL with Flask and python3 is pymysql
 import pymysql.cursors
-
+import datetime   # for mysql games
 
 HTTP_PORT = 25103
 ZMQ_LISTENING_PORT = HTTP_PORT+1000
@@ -32,10 +32,11 @@ logger = logging.getLogger(__name__)
 sockets = Sockets(app)  # ZMQ PREPARATION
 context = zmq.Context()  
 
+
 #========================= IF MYSQL =====================
 #userpa = sys.stdin.read()
-userpa=input("Input MySQL user/pass:")
-connection = pymysql.connect(host='mojzis',user=userpa,password=userpa,db='monitoring',cursorclass=pymysql.cursors.DictCursor )
+REMOTE='mojzis'
+userpa=input("Input MySQL user/pass on "+REMOTE+" : ")
 
 
 ##################################################
@@ -68,21 +69,51 @@ def index():   # gets from ./templates/
 #
 @sockets.route('/send_data')   # AUTONOMOUS 
 def send_data(ws):
-    seconds=2
-    logger.info('Got a websocket connection log ... send_data; reload every '+str(seconds)+' sec.')
+    seconds=10
+    logger.info('Got WEBSOCKET CONN ... send_data; reload every '+str(seconds)+' sec.')
     gevent.sleep()
     received = 0
-    sql = "SELECT datetime,value FROM sensor3 ORDER by id DESC LIMIT 600"
+    
+    sql3 = "SELECT datetime,value FROM sensor3 ORDER by id DESC LIMIT 600"
+    sql6 = "SELECT datetime,value FROM sensor6 ORDER by id DESC LIMIT 600"
+    sql1 = "SELECT datetime,value FROM sensor1 ORDER by id DESC LIMIT 600"
+    # i want to create 3 ListOfLists here
     while True:
+        connection = pymysql.connect(host=REMOTE,user=userpa,password=userpa,db='monitoring',cursorclass=pymysql.cursors.DictCursor )
         received += 1
         with connection.cursor() as cursor:
-            cursor.execute(sql)
-            result=cursor.fetchall()
-            print( result )
-        ws.send(  json.dumps(result) )
-        #logger.info( json.dumps(data)  )
-        #ws.send(  json.dumps(data) )
-        #logger.info( json.dumps(data)  )
+            cursor.execute(sql1)
+            result1=cursor.fetchall()
+        with connection.cursor() as cursor:
+            cursor.execute(sql3)
+            result3=cursor.fetchall()
+        with connection.cursor() as cursor:
+            cursor.execute(sql6)
+            result6=cursor.fetchall()
+            #print( result )
+        #I need list of lists, not json/dict
+        # i have list of dictionaries
+        MESSAGE1=[]
+        MESSAGE3=[]
+        MESSAGE6=[]
+        for i in result1:
+            t=datetime.datetime.strptime(i['datetime'],"%Y-%m-%d %H:%M:%S")
+            tflo=float(  t.strftime("%s") )*1000   # %s x 1000 ! 1sec==1000
+            MESSAGE1.append( [ tflo , i['value'] ] )
+        for i in result3:
+            t=datetime.datetime.strptime(i['datetime'],"%Y-%m-%d %H:%M:%S")
+            tflo=float(  t.strftime("%s") )*1000   # %s x 1000 ! 1sec==1000
+            MESSAGE3.append( [ tflo , i['value'] ] )
+        for i in result6:
+            t=datetime.datetime.strptime(i['datetime'],"%Y-%m-%d %H:%M:%S")
+            tflo=float(  t.strftime("%s") )*1000   # %s x 1000 ! 1sec==1000
+            MESSAGE6.append( [ tflo , i['value'] ] )
+        GMESS={"sensor6":MESSAGE6,"sensor3":MESSAGE3,"sensor1":MESSAGE1,}
+        #ws.send(  json.dumps(MESSAGE)  )
+        ws.send(  json.dumps( GMESS )  )
+        #logger.info( json.dumps(MESSAGE)  )
+        logger.info( "... sent length == "+str( len(MESSAGE1) )+" ... "+ str(MESSAGE1[-1] )  )
+
         time.sleep( seconds )
         gevent.sleep()
         ######################
