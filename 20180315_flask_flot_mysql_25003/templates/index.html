@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>FLASK - js</title>
+  </head>
+  <body>
+      <h2> FLASK - static + javascript load libs + flot graphs+PyMysql</h2>
+      javascript and flot  from ./static/js and ./static/flot
+      <h3>Autoload - but in fact, sending data with ws</h3>
+      <hr>
+      <div id="latest_data"></div>
+
+
+      
+    <!--script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script-->
+    <script type="text/javascript" src="static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="static/js/reconnecting-websocket.min.js"></script>
+    <!--script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.6/d3.min.js"></script-->
+    <script type="text/javascript" src="static/js/d3.min.js"></script>
+
+
+ <!--script
+    src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js">
+  </script>
+  <script
+    src="//cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.min.js">
+  </script>
+  <script
+    src="//cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.time.min.js">
+  </script-->
+  
+    
+    <script language="javascript" type="text/javascript" src="static/flot/jquery.js"></script>
+    <script language="javascript" type="text/javascript" src="static/flot/jquery.flot.js"></script>
+    <script language="javascript" type="text/javascript" src="static/flot/jquery.flot.time.js"></script>
+
+
+
+    
+    <!-- =============== graph  ======================= -->
+    <div id="placeholder1" style="width:100%;height:300px;"></div>
+
+   <!--script>
+    $(function () {
+    var dataset1 = [[0, 3], [4, 8], [8, 5], [9, 13]];
+    var dataset3 = [[0, 0], [4, 7], [8, 4], [9, 12]];
+    //var dataset6 = {{ list_of_data }}  
+     $.plot($("#placeholder1"), [
+                                {data: dataset1, label: "Temperature"},
+                                {data: dataset3, label: "Pressure 3", yaxis :2},
+                                {data: dataset6, label: "Pressure 6", yaxis :2},
+                                
+                                ],
+                                { 
+                                xaxis: { mode: "x" },
+                                yaxes: [ { position:"left",min:0 }, {
+                                        alignTicksWithAxis: 1,
+                                        position: "right",
+                                        min:0,
+                                } ],
+                                legend: { position: "sw" }
+                                });
+     });
+   </script-->
+
+
+   <!-- =============== automatic refresh ======================= -->
+    <script>
+      ws = new ReconnectingWebSocket("ws://"  + location.host + '/send_data')
+      ws.onmessage = function(message) {
+        payload = JSON.parse(message.data);  // some payload dejsonify
+        //$('#latest_data').html( message.data );  //  to replace DIV use .html
+      
+        var dataset6 = JSON.parse(message.data);
+        //document.write(dataset6,"<br>") ; // this is able to write the list
+
+   //===================== REAL GRAPH DRAWING HERE =======================
+    var dataset1 = [[0, 3], [4, 8], [8, 5], [9, 13]];
+    var dataset3 = [[0, 0], [4, 7], [8, 4], [9, 12]];
+    //var dataset6 = {{ list_of_data }}  // jinja2 style. Not zmq, do with template
+    document.write(dataset6,"<br>") ; // this is able to write the list; DEBUG
+     $.plot($("#placeholder1"), [
+                                {data: dataset1, label: "Temperature"},
+                                {data: dataset3, label: "Pressure 3", yaxis :1},
+                                {data: dataset6, label: "Pressure 6", yaxis :2},
+                                
+                                ],
+                                {
+                                //  mode:"time"
+                                xaxis: { mode: "" },
+                                yaxes: [ { position:"left",min:0 }, {
+                                        alignTicksWithAxis: 1,
+                                        position: "right",
+                                        min:0,
+                                } ],
+                                legend: { position: "sw" }
+                                });
+      
+      };
+
+
+
+    </script>
+  </body>
+</html>
