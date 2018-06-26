@@ -1,0 +1,9 @@
+<link rel="stylesheet" href="/static/style.css" type="text/css">
+{% block body %}
+{% if session['logged_in'] %}
+<p>You're logged in already!</p>
+{% else %}
+ <p>You're NOT logged in!</p>
+
+{% endif %}
+{% endblock %}

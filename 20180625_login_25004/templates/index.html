@@ -1,0 +1,33 @@
+<link rel="stylesheet" href="/static/style.css" type="text/css">
+<div>
+{% block body %}
+
+{% if session['logged_in'] %}
+<div class="loggedin">Logged in
+  <a href="logout2.html"  class="btn btn-primary btn-large btn-block" >LOGOUT</a>
+</div>
+
+{% else %}
+  <div class="notloggedin">
+    NOT Logged in
+     <a href="login2.html"  class="btn btn-primary btn-large btn-block" >LOGIN</a>
+ </div>
+{% endif %}
+
+<h1>
+  Main page of the web
+</h1>
+{% if session['logged_in'] %}
+<p>You're logged in </p>
+{% else %}
+  <p>You're NOT logged in </p>
+
+{% endif %}
+
+
+{% endblock %}
+</div>
+<div>
+  <ul> <a href="present.html">aaa</a>
+    </ul>
+</div>
